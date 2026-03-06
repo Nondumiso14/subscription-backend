@@ -1,6 +1,6 @@
 require("dotenv").config();
 const express = require("express");
-
+require("./jobs/expireSubscriptions");
 const app = express();
 
 // Middleware to read JSON
