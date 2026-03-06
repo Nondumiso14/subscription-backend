@@ -105,3 +105,21 @@ exports.getRevenueStats = (req, res) => {
   });
 
 };
+exports.getMonthlyRevenue = (req, res) => {
+
+  const query = `
+    SELECT 
+      DATE_FORMAT(payment_date, '%Y-%m') AS month,
+      SUM(amount) AS revenue
+    FROM payments
+    GROUP BY month
+    ORDER BY month ASC
+  `;
+
+  db.query(query, (err, results) => {
+    if (err) return res.status(500).json(err);
+
+    res.json(results);
+  });
+
+};

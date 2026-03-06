@@ -8,6 +8,7 @@ router.post("/create", authMiddleware, controller.createSubscription);
 router.get("/status", authMiddleware, controller.getSubscriptionStatus);
 
 router.get("/admin/revenue", authMiddleware, adminMiddleware, controller.getRevenueStats);
+router.get("/admin/revenue/monthly", authMiddleware, adminMiddleware, controller.getMonthlyRevenue);
 router.get("/test", (req, res) => {
   res.json({ message: "Subscription route working" });
 });
