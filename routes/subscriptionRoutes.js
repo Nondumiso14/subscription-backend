@@ -4,7 +4,7 @@ const controller = require("../controllers/subscriptionController");
 const authMiddleware = require("../middleware/authMiddleware");
 
 router.post("/create", authMiddleware, controller.createSubscription);
-
+router.get("/status", authMiddleware, controller.getSubscriptionStatus);
 router.get("/test", (req, res) => {
   res.json({ message: "Subscription route working" });
 });

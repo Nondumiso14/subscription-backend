@@ -31,3 +31,35 @@ exports.createSubscription = (req, res) => {
     });
   });
 };
+
+exports.getSubscriptionStatus = (req, res) => {
+  const userId = req.user.id;
+
+  const query = `
+    SELECT plan, start_date, end_date, status
+    FROM subscriptions
+    WHERE user_id = ?
+    ORDER BY start_date DESC
+    LIMIT 1
+  `;
+
+  db.query(query, [userId], (err, results) => {
+    if (err) return res.status(500).json(err);
+
+    if (results.length === 0) {
+      return res.json({
+        active: false,
+        message: "No subscription found"
+      });
+    }
+
+    const subscription = results[0];
+
+    res.json({
+      active: subscription.status === "active",
+      plan: subscription.plan,
+      start_date: subscription.start_date,
+      end_date: subscription.end_date
+    });
+  });
+};
