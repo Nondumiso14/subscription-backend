@@ -1,0 +1,12 @@
+const express = require("express");
+const router = express.Router();
+const controller = require("../controllers/subscriptionController");
+const authMiddleware = require("../middleware/authMiddleware");
+
+router.post("/create", authMiddleware, controller.createSubscription);
+
+router.get("/test", (req, res) => {
+  res.json({ message: "Subscription route working" });
+});
+
+module.exports = router;
