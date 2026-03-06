@@ -63,3 +63,45 @@ exports.getSubscriptionStatus = (req, res) => {
     });
   });
 };
+
+exports.getRevenueStats = (req, res) => {
+
+  const revenueQuery = `
+    SELECT SUM(amount) AS totalRevenue
+    FROM payments
+  `;
+
+  const activeQuery = `
+    SELECT COUNT(*) AS activeSubscriptions
+    FROM subscriptions
+    WHERE status = 'active'
+  `;
+
+  const expiredQuery = `
+    SELECT COUNT(*) AS expiredSubscriptions
+    FROM subscriptions
+    WHERE status = 'expired'
+  `;
+
+  db.query(revenueQuery, (err, revenueResult) => {
+    if (err) return res.status(500).json(err);
+
+    db.query(activeQuery, (err, activeResult) => {
+      if (err) return res.status(500).json(err);
+
+      db.query(expiredQuery, (err, expiredResult) => {
+        if (err) return res.status(500).json(err);
+
+        res.json({
+          totalRevenue: revenueResult[0].totalRevenue || 0,
+          activeSubscriptions: activeResult[0].activeSubscriptions,
+          expiredSubscriptions: expiredResult[0].expiredSubscriptions
+        });
+
+      });
+
+    });
+
+  });
+
+};
